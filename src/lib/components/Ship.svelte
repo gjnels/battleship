@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { Ship } from '$lib/game/ships'
+  import { resetShip, type Ship } from '$lib/game/ships'
   import type { Writable } from 'svelte/store'
   import { selectedShip } from '$lib/game/ships'
+  import { removeShip } from '$lib/game/board'
 
   export let ship: Writable<Ship>
 
@@ -11,7 +12,15 @@
 <div>
   <p>
     {$ship.name}
-    {#if !$ship.coords}
+    {#if $ship.coords}
+      <button
+        class="bg-orange-300 font-bold"
+        on:click={() => {
+          resetShip($ship.id)
+          removeShip($ship.id)
+        }}>Remove</button
+      >
+    {:else}
       <button
         class="bg-teal-500 font-bold"
         on:click={() => ($ship.vertical = !$ship.vertical)}>Flip</button

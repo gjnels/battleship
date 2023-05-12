@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { BOARD_STATUS, board } from '$lib/game/board'
-  import { selectedShip, ships } from '$lib/game/ships'
+  import { BOARD_STATUS, board, resetBoard } from '$lib/game/board'
+  import { resetShips, selectedShip, ships } from '$lib/game/ships'
   import { get } from 'svelte/store'
   import Selector from './Selector.svelte'
   let x = -1
@@ -11,9 +11,14 @@
     y = -1
   }
 
-  $: max = $selectedShip ? board.length - $selectedShip.size : 0
+  $: max = $selectedShip ? $board.length - $selectedShip.size : 0
 
   let validPlacement = false
+
+  const clearBoard = () => {
+    resetBoard()
+    resetShips()
+  }
 
   const setCoords = (rowIdx: number, colIdx: number) => {
     if (!$selectedShip) return
@@ -47,11 +52,11 @@
     const size = $selectedShip.size
     for (let i = 0; i < size; i++) {
       if ($selectedShip.vertical) {
-        board[y + i][x].status = BOARD_STATUS.SHIP
-        board[y + i][x].shipId = $selectedShip.id
+        $board[y + i][x].status = BOARD_STATUS.SHIP
+        $board[y + i][x].shipId = $selectedShip.id
       } else {
-        board[y][x + i].status = BOARD_STATUS.SHIP
-        board[y][x + i].shipId = $selectedShip.id
+        $board[y][x + i].status = BOARD_STATUS.SHIP
+        $board[y][x + i].shipId = $selectedShip.id
       }
     }
     $selectedShip = null
@@ -61,9 +66,9 @@
     if (!$selectedShip || x < 0 || y < 0) return false
     for (let i = 0; i < $selectedShip.size; i++) {
       if ($selectedShip.vertical) {
-        if (board[y + i][x].status !== BOARD_STATUS.EMPTY) return false
+        if ($board[y + i][x].status !== BOARD_STATUS.EMPTY) return false
       } else {
-        if (board[y][x + i].status !== BOARD_STATUS.EMPTY) return false
+        if ($board[y][x + i].status !== BOARD_STATUS.EMPTY) return false
       }
     }
     return true
@@ -80,7 +85,7 @@
     }
   }}
 >
-  {#each board as row, rowIdx}
+  {#each $board as row, rowIdx}
     <div
       class="flex gap-0.5"
       class:cursor-not-allowed={!$selectedShip}
@@ -105,6 +110,12 @@
     {y}
     {validPlacement}
   />
+  <button
+    class="mt-2 self-center rounded-md bg-orange-300 px-3 py-1 font-bold hover:brightness-110"
+    on:click={clearBoard}
+  >
+    Clear Board
+  </button>
   {#if !$selectedShip}
     <div class="mt-2 self-center text-lg font-semibold">Select a ship</div>
   {/if}
