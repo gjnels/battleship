@@ -13,6 +13,8 @@
 
   $: max = $selectedShip ? board.length - $selectedShip.size : 0
 
+  let validPlacement = false
+
   const setCoords = (rowIdx: number, colIdx: number) => {
     if (!$selectedShip) return
 
@@ -23,11 +25,13 @@
       x = colIdx > max ? max : colIdx
       y = rowIdx
     }
+
+    validPlacement = checkValidPlacement()
   }
 
   const placeShip = () => {
     if (!$selectedShip) return
-    if (!checkValidPlacement()) {
+    if (!validPlacement) {
       console.log('cannot place ship here')
       return
     }
@@ -66,6 +70,7 @@
 
 <div
   class="relative flex flex-col gap-0.5"
+  class:cursor-not-allowed={!$selectedShip}
   on:mouseleave={() => {
     if ($selectedShip) {
       x = -1
@@ -74,13 +79,17 @@
   }}
 >
   {#each board as row, rowIdx}
-    <div class="flex gap-0.5">
+    <div
+      class="flex gap-0.5"
+      class:cursor-not-allowed={!$selectedShip}
+    >
       {#each row as col, colIdx}
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
         <button
           class="h-8 w-8"
           class:bg-blue-300={col === BOARD_STATUS.EMPTY}
           class:bg-teal-300={col === BOARD_STATUS.SHIP}
+          class:cursor-not-allowed={!$selectedShip}
           on:click={placeShip}
           on:mouseover={() => {
             setCoords(rowIdx, colIdx)
@@ -92,5 +101,9 @@
   <Selector
     {x}
     {y}
+    {validPlacement}
   />
+  {#if !$selectedShip}
+    <div class="mt-2 self-center text-lg font-semibold">Select a ship</div>
+  {/if}
 </div>

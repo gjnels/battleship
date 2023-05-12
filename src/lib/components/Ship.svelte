@@ -11,10 +11,12 @@
 <div>
   <p>
     {$ship.name}
-    <button
-      class=" bg-teal-500 font-bold"
-      on:click={() => ($ship.vertical = !$ship.vertical)}>Flip</button
-    >
+    {#if !$ship.coords}
+      <button
+        class="bg-teal-500 font-bold"
+        on:click={() => ($ship.vertical = !$ship.vertical)}>Flip</button
+      >
+    {/if}
   </p>
   <p>
     Coords: {$ship.coords
@@ -25,7 +27,11 @@
     bind:this={self}
     class="flex w-fit rounded-full {$ship.vertical
       ? 'flex-col py-2'
-      : 'px-2'} {$selectedShip?.id === $ship.id ? 'bg-sky-500' : 'bg-blue-500'}"
+      : 'px-2'} {!!$ship.coords
+      ? 'bg-teal-400'
+      : $selectedShip?.id === $ship.id
+      ? 'bg-sky-500'
+      : 'bg-blue-500'}"
     on:click={(e) => {
       e.stopPropagation()
       if ($selectedShip?.id === $ship.id) {
@@ -34,6 +40,7 @@
         $selectedShip = $ship
       }
     }}
+    disabled={!!$ship.coords}
   >
     {#each $ship.hits as hit, idx}
       <div class="flex h-8 w-8 items-center justify-center">
