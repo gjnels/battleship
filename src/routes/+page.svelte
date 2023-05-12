@@ -8,7 +8,7 @@
 
 <div class="mt-10 flex justify-center gap-8">
   <div class="w-60 space-y-4">
-    {#each ships as ship}
+    {#each $ships as ship}
       <Ship {ship} />
     {/each}
   </div>

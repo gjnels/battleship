@@ -16,6 +16,11 @@
       on:click={() => ($ship.vertical = !$ship.vertical)}>Flip</button
     >
   </p>
+  <p>
+    Coords: {$ship.coords
+      ? `X: ${$ship.coords.x} | Y: ${$ship.coords.y}`
+      : 'not placed'}
+  </p>
   <button
     bind:this={self}
     class="flex w-fit rounded-full {$ship.vertical
