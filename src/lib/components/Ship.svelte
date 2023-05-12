@@ -9,12 +9,12 @@
   let self: HTMLButtonElement
 </script>
 
-<div>
+<div class="space-y-1 rounded-md bg-white p-2 shadow-md">
   <p>
     {$ship.name}
     {#if $ship.coords}
       <button
-        class="bg-orange-300 font-bold"
+        class="bg-orange-300"
         on:click={() => {
           resetShip($ship.id)
           removeShip($ship.id)
@@ -22,19 +22,14 @@
       >
     {:else}
       <button
-        class="bg-teal-500 font-bold"
+        class="bg-teal-300"
         on:click={() => ($ship.vertical = !$ship.vertical)}>Flip</button
       >
     {/if}
   </p>
-  <p>
-    Coords: {$ship.coords
-      ? `X: ${$ship.coords.x} | Y: ${$ship.coords.y}`
-      : 'not placed'}
-  </p>
   <button
     bind:this={self}
-    class="flex w-fit rounded-full {$ship.vertical
+    class="unstyled flex w-fit rounded-full {$ship.vertical
       ? 'flex-col py-2'
       : 'px-2'} {!!$ship.coords
       ? 'bg-teal-400'

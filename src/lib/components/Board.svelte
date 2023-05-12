@@ -75,48 +75,50 @@
   }
 </script>
 
-<div
-  class="relative flex flex-col gap-0.5"
-  class:cursor-not-allowed={!$selectedShip}
-  on:mouseleave={() => {
-    if ($selectedShip) {
-      x = -1
-      y = -1
-    }
-  }}
->
-  {#each $board as row, rowIdx}
-    <div
-      class="flex gap-0.5"
-      class:cursor-not-allowed={!$selectedShip}
-    >
-      {#each row as col, colIdx}
-        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-        <button
-          class="h-8 w-8"
-          class:bg-blue-300={col.status === BOARD_STATUS.EMPTY}
-          class:bg-teal-300={col.status === BOARD_STATUS.SHIP}
-          class:cursor-not-allowed={!$selectedShip}
-          on:click={placeShip}
-          on:mouseover={() => {
-            setCoords(rowIdx, colIdx)
-          }}
-        />
-      {/each}
-    </div>
-  {/each}
-  <Selector
-    {x}
-    {y}
-    {validPlacement}
-  />
-  <button
-    class="mt-2 self-center rounded-md bg-orange-300 px-3 py-1 font-bold hover:brightness-110"
-    on:click={clearBoard}
+<div class="self-end rounded-md bg-white p-2 shadow-md">
+  <div
+    class="relative flex flex-col gap-0.5"
+    class:cursor-not-allowed={!$selectedShip}
+    on:mouseleave={() => {
+      if ($selectedShip) {
+        x = -1
+        y = -1
+      }
+    }}
   >
-    Clear Board
-  </button>
-  {#if !$selectedShip}
-    <div class="mt-2 self-center text-lg font-semibold">Select a ship</div>
-  {/if}
+    {#each $board as row, rowIdx}
+      <div
+        class="flex gap-0.5"
+        class:cursor-not-allowed={!$selectedShip}
+      >
+        {#each row as col, colIdx}
+          <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+          <button
+            class="unstyled h-8 w-8"
+            class:bg-blue-300={col.status === BOARD_STATUS.EMPTY}
+            class:bg-teal-300={col.status === BOARD_STATUS.SHIP}
+            class:cursor-not-allowed={!$selectedShip}
+            on:click={placeShip}
+            on:mouseover={() => {
+              setCoords(rowIdx, colIdx)
+            }}
+          />
+        {/each}
+      </div>
+    {/each}
+    <Selector
+      {x}
+      {y}
+      {validPlacement}
+    />
+    <button
+      class="mt-2 self-center bg-orange-300"
+      on:click={clearBoard}
+    >
+      Clear Board
+    </button>
+    <div class="mt-2 self-center text-lg font-semibold">
+      {$selectedShip ? `Placing: ${$selectedShip.name}` : 'Select a ship'}
+    </div>
+  </div>
 </div>

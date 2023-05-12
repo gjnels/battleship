@@ -11,3 +11,13 @@ body,
 #app {
   display: contents;
 }
+
+body {
+  @apply bg-blue-100 text-slate-700;
+}
+
+@layer components {
+  button:not(.unstyled) {
+    @apply rounded-md px-[0.75em] py-[0.25em] font-bold text-black shadow outline-none hover:brightness-110 focus-visible:brightness-[1.15];
+  }
+}
