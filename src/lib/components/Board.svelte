@@ -15,6 +15,12 @@
 
   let validPlacement = false
 
+  $: allShipsPlaced =
+    !$selectedShip &&
+    $ships.every((ship) => {
+      return !!get(ship).coords
+    })
+
   const clearBoard = () => {
     resetBoard()
     resetShips()
@@ -118,7 +124,11 @@
       Clear Board
     </button>
     <div class="mt-2 self-center text-lg font-semibold">
-      {$selectedShip ? `Placing: ${$selectedShip.name}` : 'Select a ship'}
+      {allShipsPlaced
+        ? 'Ready to begin!'
+        : $selectedShip
+        ? `Placing: ${$selectedShip.name}`
+        : 'Select a ship'}
     </div>
   </div>
 </div>
