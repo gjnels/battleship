@@ -1,5 +1,3 @@
-import { get, writable } from 'svelte/store'
-
 const BOARD_SIZE = 10
 
 export enum BOARD_STATUS {

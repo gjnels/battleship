@@ -27,7 +27,10 @@
 
   const placeShip = () => {
     if (!$selectedShip) return
-    checkValidPlacement()
+    if (!checkValidPlacement()) {
+      console.log('cannot place ship here')
+      return
+    }
     $ships = $ships.map((ship) => {
       if (get(ship).id === $selectedShip?.id) {
         ship.update((s) => {
@@ -50,8 +53,12 @@
 
   const checkValidPlacement = () => {
     if (!$selectedShip || x < 0 || y < 0) return false
-    for (let i = 0; i < $ships.length; i++) {
-      // console.log(get($ships[i]).coords)
+    for (let i = 0; i < $selectedShip.size; i++) {
+      if ($selectedShip.vertical) {
+        if (board[y + i][x] !== BOARD_STATUS.EMPTY) return false
+      } else {
+        if (board[y][x + i] !== BOARD_STATUS.EMPTY) return false
+      }
     }
     return true
   }
@@ -70,17 +77,15 @@
     <div class="flex gap-0.5">
       {#each row as col, colIdx}
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-        {#if $selectedShip}
-          <button
-            class="h-8 w-8 bg-blue-300"
-            on:click={placeShip}
-            on:mouseover={() => {
-              setCoords(rowIdx, colIdx)
-            }}
-          />
-        {:else}
-          <div class="h-8 w-8 bg-blue-300" />
-        {/if}
+        <button
+          class="h-8 w-8"
+          class:bg-blue-300={col === BOARD_STATUS.EMPTY}
+          class:bg-teal-300={col === BOARD_STATUS.SHIP}
+          on:click={placeShip}
+          on:mouseover={() => {
+            setCoords(rowIdx, colIdx)
+          }}
+        />
       {/each}
     </div>
   {/each}
