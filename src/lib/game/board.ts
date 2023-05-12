@@ -8,11 +8,11 @@ export enum BOARD_STATUS {
   SUNK
 }
 
-export const board: BOARD_STATUS[][] = []
+export const board: { status: BOARD_STATUS; shipId: number }[][] = []
 
 for (let row = 0; row < BOARD_SIZE; row++) {
   board[row] = []
   for (let col = 0; col < BOARD_SIZE; col++) {
-    board[row][col] = BOARD_STATUS.EMPTY
+    board[row][col] = { status: BOARD_STATUS.EMPTY, shipId: 0 }
   }
 }

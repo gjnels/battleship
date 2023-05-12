@@ -47,9 +47,11 @@
     const size = $selectedShip.size
     for (let i = 0; i < size; i++) {
       if ($selectedShip.vertical) {
-        board[y + i][x] = BOARD_STATUS.SHIP
+        board[y + i][x].status = BOARD_STATUS.SHIP
+        board[y + i][x].shipId = $selectedShip.id
       } else {
-        board[y][x + i] = BOARD_STATUS.SHIP
+        board[y][x + i].status = BOARD_STATUS.SHIP
+        board[y][x + i].shipId = $selectedShip.id
       }
     }
     $selectedShip = null
@@ -59,9 +61,9 @@
     if (!$selectedShip || x < 0 || y < 0) return false
     for (let i = 0; i < $selectedShip.size; i++) {
       if ($selectedShip.vertical) {
-        if (board[y + i][x] !== BOARD_STATUS.EMPTY) return false
+        if (board[y + i][x].status !== BOARD_STATUS.EMPTY) return false
       } else {
-        if (board[y][x + i] !== BOARD_STATUS.EMPTY) return false
+        if (board[y][x + i].status !== BOARD_STATUS.EMPTY) return false
       }
     }
     return true
@@ -87,8 +89,8 @@
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
         <button
           class="h-8 w-8"
-          class:bg-blue-300={col === BOARD_STATUS.EMPTY}
-          class:bg-teal-300={col === BOARD_STATUS.SHIP}
+          class:bg-blue-300={col.status === BOARD_STATUS.EMPTY}
+          class:bg-teal-300={col.status === BOARD_STATUS.SHIP}
           class:cursor-not-allowed={!$selectedShip}
           on:click={placeShip}
           on:mouseover={() => {
