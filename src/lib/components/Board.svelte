@@ -81,7 +81,9 @@
   }
 </script>
 
+<!-- Board wrapper -->
 <div class="self-end rounded-md bg-white p-2 shadow-md">
+  <!-- Board container -->
   <div
     class="relative flex flex-col gap-0.5"
     class:cursor-not-allowed={!$selectedShip}
@@ -92,13 +94,17 @@
       }
     }}
   >
+    <!-- Board -->
     {#each $board as row, rowIdx}
+      <!-- Row -->
       <div
         class="flex gap-0.5"
         class:cursor-not-allowed={!$selectedShip}
       >
+        <!-- Column -->
         {#each row as col, colIdx}
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+          <!-- Cell -->
           <button
             class="unstyled h-8 w-8"
             class:bg-blue-300={col.status === BOARD_STATUS.EMPTY}
@@ -112,17 +118,20 @@
         {/each}
       </div>
     {/each}
+    <!-- Visual ship placement selector -->
     <Selector
       {x}
       {y}
       {validPlacement}
     />
+    <!-- Clear board button -->
     <button
       class="mt-2 self-center bg-orange-300"
       on:click={clearBoard}
     >
       Clear Board
     </button>
+    <!-- Ship placement status message -->
     <div class="mt-2 self-center text-lg font-semibold">
       {allShipsPlaced
         ? 'Ready to begin!'

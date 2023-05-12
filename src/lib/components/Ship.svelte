@@ -9,10 +9,14 @@
   let self: HTMLButtonElement
 </script>
 
+<!-- Ship container -->
 <div class="space-y-1 rounded-md bg-white p-2 shadow-md">
+  <!-- Ship info -->
   <p>
+    <!-- Ship name -->
     {$ship.name}
     {#if $ship.coords}
+      <!-- Remove ship from board button -->
       <button
         class="bg-orange-300"
         on:click={() => {
@@ -21,12 +25,14 @@
         }}>Remove</button
       >
     {:else}
+      <!-- Flip ship button -->
       <button
         class="bg-teal-300"
         on:click={() => ($ship.vertical = !$ship.vertical)}>Flip</button
       >
     {/if}
   </p>
+  <!-- Ship -->
   <button
     bind:this={self}
     class="unstyled flex w-fit rounded-full {$ship.vertical
@@ -46,6 +52,7 @@
     }}
     disabled={!!$ship.coords}
   >
+    <!-- Ship markers -->
     {#each $ship.hits as hit, idx}
       <div class="flex h-8 w-8 items-center justify-center">
         <span
