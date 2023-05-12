@@ -1,14 +1,21 @@
-import { readonly, writable } from 'svelte/store'
+import { writable } from 'svelte/store'
 
 export interface Ship {
+  id: number
   size: number
   name: string
   hits: boolean[]
   vertical: boolean
 }
 
-const createShip = (size: number, name: string, vertical = false) => {
+const createShip = (
+  id: number,
+  size: number,
+  name: string,
+  vertical = false
+) => {
   const { subscribe, update, set } = writable<Ship>({
+    id,
     size,
     name,
     hits: Array(size).fill(false),
@@ -23,9 +30,11 @@ const createShip = (size: number, name: string, vertical = false) => {
 }
 
 export const ships = [
-  createShip(5, 'Carrier'),
-  createShip(4, 'Battleship'),
-  createShip(3, 'Destroyer'),
-  createShip(3, 'Submarine'),
-  createShip(2, 'Patrol Boat')
+  createShip(1, 5, 'Carrier'),
+  createShip(2, 4, 'Battleship'),
+  createShip(3, 3, 'Destroyer'),
+  createShip(4, 3, 'Submarine'),
+  createShip(5, 2, 'Patrol Boat')
 ]
+
+export const selectedShip = writable<Ship | null>(null)
