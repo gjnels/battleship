@@ -3,23 +3,24 @@
   import { resetShips, selectedShip, ships } from '$lib/game/ships'
   import { get } from 'svelte/store'
   import Selector from './Selector.svelte'
+
   let x = -1
   let y = -1
-
-  $: if (!$selectedShip) {
-    x = -1
-    y = -1
-  }
-
-  $: max = $selectedShip ? $board.length - $selectedShip.size : 0
-
   let validPlacement = false
+
+  // Restrict coordinates to keep ship on board
+  $: max = $selectedShip ? $board.length - $selectedShip.size : 0
 
   $: allShipsPlaced =
     !$selectedShip &&
     $ships.every((ship) => {
       return !!get(ship).coords
     })
+
+  const resetCoords = () => {
+    x = -1
+    y = -1
+  }
 
   const clearBoard = () => {
     resetBoard()
@@ -79,6 +80,8 @@
     }
     return true
   }
+
+  $: resetCoords()
 </script>
 
 <!-- Board wrapper -->
@@ -87,12 +90,7 @@
   <div
     class="relative flex flex-col gap-0.5"
     class:cursor-not-allowed={!$selectedShip}
-    on:mouseleave={() => {
-      if ($selectedShip) {
-        x = -1
-        y = -1
-      }
-    }}
+    on:mouseleave={resetCoords}
   >
     <!-- Board -->
     {#each $board as row, rowIdx}

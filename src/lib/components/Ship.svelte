@@ -6,35 +6,40 @@
 
   export let ship: Writable<Ship>
 
-  let self: HTMLButtonElement
+  const handleShipClick = () => {
+    $selectedShip = $selectedShip?.id === $ship.id ? null : $ship
+  }
+  const handleRemove = () => {
+    resetShip($ship.id)
+    removeShip($ship.id) // Remove ship from board
+  }
+  const handleFlip = () => {
+    $ship.vertical = !$ship.vertical
+  }
 </script>
 
 <!-- Ship container -->
-<div class="space-y-1 rounded-md bg-white p-2 shadow-md">
+<div class="space-y-2 rounded-md bg-white p-2 shadow-md">
   <!-- Ship info -->
-  <p>
+  <div class="flex justify-between">
     <!-- Ship name -->
-    {$ship.name}
+    <span class="font-medium">{$ship.name}</span>
     {#if $ship.coords}
       <!-- Remove ship from board button -->
       <button
         class="bg-orange-300"
-        on:click={() => {
-          resetShip($ship.id)
-          removeShip($ship.id)
-        }}>Remove</button
+        on:click={handleRemove}>Remove</button
       >
     {:else}
       <!-- Flip ship button -->
       <button
         class="bg-teal-300"
-        on:click={() => ($ship.vertical = !$ship.vertical)}>Flip</button
+        on:click={handleFlip}>Flip</button
       >
     {/if}
-  </p>
+  </div>
   <!-- Ship -->
   <button
-    bind:this={self}
     class="unstyled flex w-fit rounded-full {$ship.vertical
       ? 'flex-col py-2'
       : 'px-2'} {!!$ship.coords
@@ -42,18 +47,11 @@
       : $selectedShip?.id === $ship.id
       ? 'bg-sky-500'
       : 'bg-blue-500'}"
-    on:click={(e) => {
-      e.stopPropagation()
-      if ($selectedShip?.id === $ship.id) {
-        $selectedShip = null
-      } else {
-        $selectedShip = $ship
-      }
-    }}
+    on:click={handleShipClick}
     disabled={!!$ship.coords}
   >
     <!-- Ship markers -->
-    {#each $ship.hits as hit, idx}
+    {#each $ship.hits as hit}
       <div class="flex h-8 w-8 items-center justify-center">
         <span
           class="aspect-square w-3 rounded-full {hit
