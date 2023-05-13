@@ -112,6 +112,7 @@
             on:mouseover={() => {
               setCoords(rowIdx, colIdx)
             }}
+            disabled={!$selectedShip}
           />
         {/each}
       </div>
